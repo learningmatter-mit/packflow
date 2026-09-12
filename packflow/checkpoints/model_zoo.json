@@ -1,0 +1,38 @@
+{
+  "packflow-2M": {
+    "path": "packflow-2M/best_model.pt",
+    "params": "~2M",
+    "role": "base",
+    "description": "Smallest base flow-matching model (d_model=160-ish). Tables 1/2 size sweep.",
+    "hf_repo": "aksub99/packflow-checkpoints",
+    "hf_filename": "packflow-2M/best_model.pt"
+  },
+  "packflow-20M": {
+    "path": "packflow-20M/best_model.pt",
+    "params": "~20M",
+    "role": "base",
+    "description": "Mid-size base flow-matching model. Tables 1/2 size sweep.",
+    "hf_repo": "aksub99/packflow-checkpoints",
+    "hf_filename": "packflow-20M/best_model.pt"
+  },
+  "packflow-ddp": {
+    "path": "packflow-ddp/best_model.pt",
+    "params": "~60M",
+    "role": "base",
+    "aliases": ["packflow-60M"],
+    "description": "60M DDP-trained base model. The canonical 60M used in the main tables and as the GRPO base.",
+    "hf_repo": "aksub99/packflow-checkpoints",
+    "hf_filename": "packflow-ddp/best_model.pt"
+  },
+  "packflow-pa": {
+    "path": "packflow-pa/best_model.pt",
+    "params": "~60M",
+    "role": "grpo-pa",
+    "base": "packflow-ddp",
+    "source_checkpoint": "E025_step_3200.pt",
+    "ef_lambda": 1.0,
+    "description": "Preference-aligned (PA) model: GRPO finetune of packflow-ddp with energy+force reward at lambda=1.0 (experiment E025). Used for Figure 4 and Figure 5.",
+    "hf_repo": "aksub99/packflow-checkpoints",
+    "hf_filename": "packflow-pa/best_model.pt"
+  }
+}

@@ -1,0 +1,121 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "packflow"
+version = "1.0.0"
+description = "PackFlow: flow matching for molecular crystal structure prediction, with GRPO post-training, UMA relaxation, and reproduction tooling for the paper."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "PackFlow Authors" }]
+keywords = [
+    "crystal-structure-prediction",
+    "flow-matching",
+    "molecular-crystals",
+    "generative-models",
+    "grpo",
+]
+
+# Core runtime: training, sampling/inference, and evaluation metrics.
+# Version lower bounds reflect the environment used to produce the paper results.
+dependencies = [
+    "numpy>=1.26,<2",
+    "scipy>=1.13",
+    "pandas>=2.2",
+    "matplotlib>=3.9",
+    "tqdm>=4.67",
+    "pyyaml>=6.0",
+    # torch / PyG stack pinned to the exact versions used to produce the paper
+    # results. torch + torch-scatter are pulled from dedicated wheel indexes
+    # (see [tool.uv] below) so `uv sync` installs CUDA wheels without compiling.
+    "torch==2.5.1",
+    "torch-geometric>=2.6",
+    "torch-scatter==2.1.2",       # used by packflow/models/model.py (core)
+    "pytorch-lightning>=2.2",     # CrystalDataModule for training/evaluation
+    "rdkit>=2024.3",
+    "pymatgen>=2024.8",
+    "ase>=3.23",
+    "scikit-learn>=1.5",
+    "networkx>=3.2",
+    "e3nn>=0.5",
+    "einops>=0.8",
+    "vesin>=0.3",
+    "average-minimum-distance>=1.6",
+    "spglib>=2.5",
+    "gemmi>=0.7",
+    "joblib>=1.4",
+    "huggingface_hub>=0.24",
+]
+
+[project.optional-dependencies]
+# GRPO post-training (RL) extras. fairchem/UMA itself is a pinned git submodule
+# under external/fairchem; install it with `uv pip install -e external/fairchem`.
+grpo = [
+    "wandb>=0.19",
+]
+
+# UMA-based relaxation / lattice energy / energy-force metrics (Figure 5).
+# fairchem is installed from the submodule; ase is already in core.
+uma = []
+
+# CSD data preprocessing (Crystal_Math). The CSD Python API is proprietary and
+# is NOT pip-installable: it requires a valid CCDC license and is installed via
+# the CSD installer. Python 3.9 is required for the CSD Python API.
+# This extra only lists the open dependencies of the preprocessing overlay.
+csd = [
+    "h5py>=3.10",
+]
+
+# Richer plotting used by some paper figures.
+plot = [
+    "seaborn>=0.13",
+    "palettable>=3.3",
+    "plotly>=6.0",
+    "tabulate>=0.9",
+    "uncertainties>=3.2",
+]
+
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.5",
+]
+
+all = [
+    "packflow[grpo,uma,csd,plot,dev]",
+]
+
+[project.scripts]
+packflow = "packflow.cli:main"
+packflow-process = "packflow.processing.final_crystal_processor:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["packflow"]
+# Checkpoints live under packflow/checkpoints/ in the source tree and are found
+# via an editable install (`uv pip install -e .`). They are intentionally not
+# bundled into built wheels because of their size (~2-3 GB).
+exclude = ["packflow/checkpoints/*.pt", "packflow/checkpoints/**/*.pt"]
+
+# --- uv: CUDA wheel indexes for the torch / PyG stack --------------------------
+# torch and torch-scatter ship as prebuilt CUDA wheels (not on PyPI for this
+# combo). Pin them to dedicated indexes so `uv sync` never compiles them.
+# Matches the paper environment: torch 2.5.1 + cu121, torch-scatter pt25cu121.
+[tool.uv.sources]
+torch = { index = "pytorch-cu121" }
+torch-scatter = { index = "pyg-pt25-cu121" }
+
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
+
+[[tool.uv.index]]
+name = "pyg-pt25-cu121"
+url = "https://data.pyg.org/whl/torch-2.5.0+cu121.html"
+format = "flat"
+explicit = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"

@@ -1,0 +1,14 @@
+[submodule "external/Crystal_Math"]
+	path = external/Crystal_Math
+	url = https://github.com/nigalanakis/Crystal_Math.git
+[submodule "external/Genarris"]
+	path = external/Genarris
+	url = https://github.com/Yi5817/Genarris.git
+	# Genarris' nested cgenarris submodule emits SWIG/compile build artifacts
+	# (*_wrap.c, generated .py wrappers, __pycache__) into its worktree. Those
+	# are required at runtime but untracked upstream, so ignore worktree dirtiness
+	# here -- the pinned commit is still tracked/committed normally.
+	ignore = dirty
+[submodule "external/fairchem"]
+	path = external/fairchem
+	url = https://github.com/facebookresearch/fairchem.git

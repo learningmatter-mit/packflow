@@ -1,0 +1,73 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# uv
+uv.lock
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Logs / outputs
+logs/
+*.out
+wandb/
+slurm-*.out
+
+# Generated inspection artifacts (figures, tables, run logs).
+outputs/
+
+# ---------------------------------------------------------------------------
+# Private / personal reproduction tooling (kept on disk, not published).
+# Figure and table rendering needs ~16 GB of our internal evaluation dumps, so
+# it is maintained separately from the open-source package surface.
+# ---------------------------------------------------------------------------
+packflow/plotting/
+packflow/evaluation/paper_tables.py
+packflow/evaluation/detailed.py
+scripts/plot.py
+scripts/make_tables.py
+scripts/run_all_figures.py
+scripts/generate_test_samples.py
+scripts/test_genarris.py
+scripts/make_data_subset.py
+tests/test_plotting.py
+# Cluster-specific Slurm jobs (kept locally, not published)
+slurm/
+# Paper manuscript (kept locally, not published)
+paper_latex/
+# Leftover intermediate refcode filters (not the shipped 312-set)
+data/refcodes/test_clean_*.txt
+
+# Large data / generated artifacts (reproduction is via refcodes + scripts)
+data/processed_data*/
+data/*_cifs/
+data/homomolecular*/
+evaluation/**/results/
+*.h5
+*.hdf5
+
+# Caches
+uma_cache/
+*_cache/
+pca_cache/
+
+# Model checkpoints are distributed via Hugging Face (see packflow/checkpoints.py)
+# and downloaded on first use; they are never committed so the repo stays clone-able.
+# They live locally at packflow/checkpoints/<name>/best_model.pt for testing.
+*.pt
+grpo_output/
