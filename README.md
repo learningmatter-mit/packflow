@@ -1,4 +1,6 @@
 # PackFlow
+[![arXiv](https://img.shields.io/badge/arXiv-2410.08833-84cc16)](https://arxiv.org/abs/2602.20140)
+[![MIT](https://img.shields.io/badge/License-MIT-3b82f6.svg)](https://opensource.org/license/mit)
 
 This repository is the code accompanying the paper
 [PackFlow: Generative Molecular Crystal Structure Prediction via Reinforcement Learning Alignment](https://arxiv.org/abs/2602.20140).
